@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use stdClass;
 
-function create_book_attempt($data) {
+function create_item_attempt($data) {
     global $CFG, $DB, $USER, $OUTPUT;
 
     $readinglist = $DB->get_record('readinglist', ['id' => $data->rid]);
@@ -38,25 +38,74 @@ function create_book_attempt($data) {
         return false;
     }
 
-    // $newbook = new stdClass();
-    $newbook = array();
-    $newbook['title'] = $data->title;
-    $newbook['isbn'] = $data->isbn;
-    // $newbook->timecreated = time();
-    // $newbook->timecompleted = time();
+    // $newitem is an array for readinglist_item table
+    $newitem = [];
+    $newitem['title'] = $data->title;
+    $newitem['url'] = $data->url;
+    $newitem['type'] = $data->type;
+    $newitem['year'] = $data->year;
+    // $newitem['dataid'] = null; // No need to do this, DB does this already
 
-    $newbookid = $DB->insert_record('readinglist_book', $newbook);
+    $newitemid = $DB->insert_record('readinglist_item', $newitem);
 
-    if ($newbookid > 0) {//should check if it's not false?? TODO: improve
-        $addbook = array();
-        $addbook['activityid'] = $data->rid;
-        $addbook['bookid'] = $newbookid;
-        $addtoreadinglist = $DB->insert_record('readinglist_list', $addbook);
+    if ($newitemid > 0) {//should check if it's not false?? TODO: improve
+        // If item inserted successfully
+        switch ($data->type){
+            case 'book':
+                create_book_attempt($newitemid, $data);
+                break;
+            case 'article':
+                create_article_attempt($newitemid, $data);
+                break;
+            case 'website':
+                create_website_attempt($newitemid, $data);
+                break;
+            default:
+                break;
+        }
     }
 
-    if (!$newbookid | !$addtoreadinglist){
-        return false; //false on failure to add both entries
-    }
+    // if (!$newitemid | !$addtoreadinglist){
+    //     return false; //false on failure to add both entries
+    // }
 
     return true;
+}
+
+function create_book_attempt(int $itemid, $data) {
+    global $DB;
+    $newbook = [];
+    $newbook['isbn'] = $data->isbn;
+    $newbook['edition'] = $data->edition;
+    $newbook['pagerange'] = $data->pagerange;
+    $newbook['chapter'] = $data->chapter;
+    $newbookid = $DB->insert_record('readinglist_book', $newbook);
+    if ($newbookid > 0) {//should check if it's not false?? TODO: improve
+        $success = update_item_dataid_attempt($itemid, $newbookid);
+        if (!$success) {
+            echo '';
+            // if not success here need to:
+                //1. remove item
+                //2. throw exception or print error
+        }
+        return $success;
+    }
+    // add something to handle exception
+    return false;
+}
+
+function create_article_attempt(int $itemid, $data) {
+    return;
+}
+
+function create_website_attempt(int $itemid, $data) {
+    return;
+}
+
+function update_item_dataid_attempt(int $itemid, int $newdataid) {
+    global $DB;
+    $changeditem = new stdClass();
+    $changeditem->id = $itemid;
+    $changeditem->dataid = $newdataid;
+    return $DB->update_record('readinglist_item', $changeditem);
 }
