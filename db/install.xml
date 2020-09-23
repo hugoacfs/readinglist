@@ -69,7 +69,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="readinglist_wesbite" COMMENT="Each record is additional item data for website type.">
+    <TABLE NAME="readinglist_website" COMMENT="Each record is additional item data for website type.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="name" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
