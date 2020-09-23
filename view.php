@@ -52,8 +52,16 @@ $PAGE->set_title(format_string($readinglist->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-$items = array();
+$items = [];
 $items = $DB->get_records('readinglist_item');
+// Making things upper case - might want to remove TODO: review
+foreach ($items as $index=>$object) {
+    foreach ($object as $key=>$value) {
+        if (is_string($value) && (strlen($value) > 0)) {
+            $object->$key = ucfirst($value);
+        }
+    }
+}
 
 echo $OUTPUT->header();
 $templatecontext = (object)[

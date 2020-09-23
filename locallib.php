@@ -47,29 +47,56 @@ function create_item_attempt($data) {
     // $newitem['dataid'] = null; // No need to do this, DB does this already
 
     $newitemid = $DB->insert_record('readinglist_item', $newitem);
-
+    $success = false;
     if ($newitemid > 0) {//should check if it's not false?? TODO: improve
         // If item inserted successfully
-        switch ($data->type){
-            case 'book':
-                create_book_attempt($newitemid, $data);
-                break;
-            case 'article':
-                create_article_attempt($newitemid, $data);
-                break;
-            case 'website':
-                create_website_attempt($newitemid, $data);
-                break;
-            default:
-                break;
+        $success = create_data_attempt($newitemid, $data, $data->type);
+        // switch ($data->type){
+        //     case 'book':
+        //         $success = create_book_attempt($newitemid, $data);
+        //         break;
+        //     case 'article':
+        //         $success = create_article_attempt($newitemid, $data);
+        //         break;
+        //     case 'website':
+        //         $success = create_website_attempt($newitemid, $data);
+        //         break;
+        //     default:
+        //         $success = true;
+        //         break;
+        // }
+        if(!$success) {
+            $params = ['newitemid' => $newitemid];
+            $DB->delete_records_select('readinglist_item',"id = :newitemid", $params);
         }
     }
+    return $success;
+}
 
-    // if (!$newitemid | !$addtoreadinglist){
-    //     return false; //false on failure to add both entries
-    // }
-
-    return true;
+function create_data_attempt(int $itemid, $data, string $type) {
+    if (!$type) {
+        return true;
+    }
+    global $DB;
+    $newbook = [];
+    foreach ($data as $key => $value) {
+        $newbook[$key] = $value;
+    }
+    // $newbook['isbn'] = $data->isbn;
+    // $newbook['edition'] = $data->edition;
+    // $newbook['pagerange'] = $data->pagerange;
+    // $newbook['chapter'] = $data->chapter;
+    $newdataid = $DB->insert_record('readinglist_' . $type, $newbook);
+    $success = false;
+    if ($newdataid > 0) {//should check if it's not false?? TODO: improve
+        $success = update_item_dataid_attempt($itemid, $newdataid);
+        if (!$success) {
+            $params = ['newdataid' => $newdataid];
+            $DB->delete_records_select('readinglist_' . $type,"id = :newdataid", $params);
+        }
+        return $success;
+    }
+    return $success;
 }
 
 function create_book_attempt(int $itemid, $data) {
@@ -80,18 +107,16 @@ function create_book_attempt(int $itemid, $data) {
     $newbook['pagerange'] = $data->pagerange;
     $newbook['chapter'] = $data->chapter;
     $newbookid = $DB->insert_record('readinglist_book', $newbook);
+    $success = false;
     if ($newbookid > 0) {//should check if it's not false?? TODO: improve
         $success = update_item_dataid_attempt($itemid, $newbookid);
         if (!$success) {
-            echo '';
-            // if not success here need to:
-                //1. remove item
-                //2. throw exception or print error
+            $params = ['newbookid' => $newbookid];
+            $DB->delete_records_select('readinglist_book',"id = :newbookid", $params);
         }
         return $success;
     }
-    // add something to handle exception
-    return false;
+    return $success;
 }
 
 function create_article_attempt(int $itemid, $data) {
