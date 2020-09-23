@@ -60,7 +60,7 @@ if ($form->is_cancelled()) {
     // If it's cancelled, do nothing
 }else if ($formdata = $form->get_data()) { //If data from form exists, do something
     // var_dump($formdata);
-    $saved = \mod_readinglist\create_book_attempt($formdata); //TODO: Create this functionality
+    $saved = \mod_readinglist\create_item_attempt($formdata); //TODO: Create this functionality
     $link = new moodle_url('/mod/readinglist/view.php', ['id' => $cm->id]);
     if ($saved) {
         echo $OUTPUT->notification(get_string('add_item_successful', 'mod_readinglist', $link->out()), 'success'); //TODO: Find out why link doesn't work?
