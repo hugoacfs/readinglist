@@ -22,32 +22,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/str', 'core/log'], function($, str) {
-
-    var init = function() {
-        reset();
-    };
-
-    var reset = function() {
-        var noselection = str.get_string('noselection', 'mod_readinglist');
-
-        $.when(noselection).done(function(localstring) {
-            var noselectionstring = localstring;
-            $('.filter_form [type="reset"]').on('click', function() {
-                var autocompletes = $('[data-fieldtype=autocomplete]');
-                autocompletes.each(function(i, autocomplete) {
-                    $(autocomplete).find('select option').each(function(ai, option) {
-                        $(option).removeAttr('selected');
-                    });
-                    $(autocomplete).find('span.tag').each(function(ti, t) {
-                        $(t).attr('data-value', '').text(noselectionstring);
-                    });
-                });
-            });
-        });
-    };
-
+define(['jquery'], function($) {
+ 
     return {
-        init: init
+        init: function() {
+ 
+            $("#id_isbn_btn").click(function() {
+                alert('Working..');
+            });
+        }
     };
- });
+});
