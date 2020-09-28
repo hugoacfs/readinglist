@@ -44,7 +44,7 @@ $context = context_module::instance($cm->id);
 
 //require_capability('mod/readinglist:view', $context); //TODO: FIX
 
-$PAGE->set_url('/mod/readinglist/add_item.php', ['cmid' => $cm->id]);
+$PAGE->set_url('/mod/readinglist/add_book.php', ['cmid' => $cm->id]);
 
 $PAGE->set_title($course->shortname.': '. $readinglist->name);
 $PAGE->set_heading($course->fullname);
@@ -62,8 +62,8 @@ if ($form->is_cancelled()) {
     // var_dump($formdata);
     $saved = \mod_readinglist\create_item_attempt($formdata); //TODO: Create this functionality
     $link = new moodle_url('/mod/readinglist/view.php', ['id' => $cm->id]);
-    if ($saved) {// TODO: CHANGE link->out for actual string
-        echo $OUTPUT->notification(get_string('add_item_successful', 'mod_readinglist', $formdata->title), 'success'); //TODO: Find out why link doesn't work?
+    if ($saved) {
+        echo $OUTPUT->notification(get_string('add_item_successful', 'mod_readinglist', $link->out()), 'success'); //TODO: Find out why link doesn't work?
     } else {
         // All warnings have already been printed.
         // Perhaps a redirect link.

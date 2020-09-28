@@ -50,3 +50,7 @@ $string['form_addarticle'] = 'Add new Article.';
 $string['form_addwebsite'] = 'Add new Website.';
 $string['add_item_successful'] = '{$a} added successfully.';
 $string['add_item_failed'] = 'Failed to add {$a}.';
+$string['remove_item_confirm'] = 'Remove item';
+$string['remove_item_successful'] = 'Successfully removed the item from this list.';
+$string['remove_item_couldnot'] = 'Could not remove the item from this list.';
+$string['remove_item_confirm_box'] = 'Are you absolutely sure you want to completely delete the item "{$a}"?';

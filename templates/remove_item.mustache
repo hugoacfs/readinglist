@@ -23,10 +23,8 @@
         
     }
 }}
-
-<h1>{{readinglistname}}</h1>
-<hr>
-<p>This reading list has {{numberofentries}} items.</p>
+<h3>Removing from list</h3>
+<p>Are you sure you want to remove {{item}}.</p>
 <br>
 <table class="table">
   <thead>
@@ -35,19 +33,17 @@
       <th scope="col">Title</th>
       <th scope="col">Type</th>
       <th scope="col"></th>
-      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
-{{#items}}
+{{#item}}
 <tr>
-      <th scope="row">{{id}}</th>
+      <th scope="row">1</th>
       <td>{{title}}</td>
-      <td>{{type}}</td>      
-      <td><a href="{{{inspecturl}}}" class="btn btn-primary text-white">View Item</a></td>
-      <td><a href="{{{removeurl}}}" class="btn btn-danger text-white">Remove from this list</a></td>
+      <td>{{type}}</td>
+      <td><a href="{{{removefromurl}}}&itemid={{id}}" class="btn btn-danger text-white">Remove Now</a></td>
 </tr>
-{{/items}}
+{{/item}}
   </tbody>
 </table>
 
