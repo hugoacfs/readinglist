@@ -24,8 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-defined('MOODLE_INTERNAL') || die();
-
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once($CFG->dirroot . '/mod/readinglist/lib.php');
 require_once($CFG->libdir . '/filelib.php');

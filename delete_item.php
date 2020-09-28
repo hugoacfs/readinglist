@@ -44,35 +44,42 @@ $context = context_module::instance($cm->id);
 
 //require_capability('mod/readinglist:view', $context); //TODO: FIX
 
-$PAGE->set_url('/mod/readinglist/add_item.php', ['cmid' => $cm->id]);
+$PAGE->set_url('/mod/readinglist/add_book.php', ['cmid' => $cm->id]);
 
 $PAGE->set_title($course->shortname.': '. $readinglist->name);
 $PAGE->set_heading($course->fullname);
 $PAGE->set_activity_record($readinglist);
-$PAGE->requires->js_call_amd('mod_readinglist/readinglist', 'init');
 
 // $output = $PAGE->get_renderer('mod_readinglist');
 echo $OUTPUT->header();
 echo $OUTPUT->heading($readinglist->name);
 
 $form = new add_item_form(null, ['rid'=>$readinglist->id, 'cmid'=>$cm->id, 'type'=>$type], 'post', '', ['class' => 'readinglist_form']);
+
 if ($form->is_cancelled()) {
     // If it's cancelled, do nothing
 }else if ($formdata = $form->get_data()) { //If data from form exists, do something
     // var_dump($formdata);
     $saved = \mod_readinglist\create_item_attempt($formdata); //TODO: Create this functionality
     $link = new moodle_url('/mod/readinglist/view.php', ['id' => $cm->id]);
-    if ($saved) {// TODO: CHANGE link->out for actual string
-        echo $OUTPUT->notification(get_string('add_item_successful', 'mod_readinglist', $formdata->title), 'success'); //TODO: Find out why link doesn't work?
+    if ($saved) {
+        echo $OUTPUT->notification(get_string('add_item_successful', 'mod_readinglist', $link->out()), 'success'); //TODO: Find out why link doesn't work?
     } else {
         // All warnings have already been printed.
         // Perhaps a redirect link.
         echo html_writer::link($link, "Return to view.");
     } //TODO: make this work maybe?
-} else if (!empty($formdata->isbn_btn)) {
-    echo 'success!';die;
-}
-else { // else, then do something else
+} else { // else, then do something else
+    // $preventloggedinas = get_config('mod_evaluation', 'preventloggedinas'); //TODO: consider whether this or similar is needed
+    // if (\core\session\manager::is_loggedinas() && $preventloggedinas) {
+    //     echo $OUTPUT->notification(get_string('loggedinas', 'mod_evaluation'), 'warning');
+    // }
+    // if (isset($USER->access['rsw']) && !empty($USER->access['rsw'])) {
+    //     echo $OUTPUT->notification(get_string('switchedrole', 'mod_evaluation'), 'warning');
+    // }
+    // if ($form->is_submitted() && !$form->is_validated()) {
+    //     echo $OUTPUT->notification(get_string('validationerror', 'mod_evaluation'));
+    // }
     $form->display();
 }
 

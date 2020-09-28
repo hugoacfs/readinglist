@@ -24,30 +24,48 @@
     }
 }}
 
-<h1>{{readinglistname}}</h1>
+<h1>{{title}}</h1>
 <hr>
-<p>This reading list has {{numberofentries}} items.</p>
+<p>This item is a {{itemtype}}.</p>
 <br>
 <table class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Title</th>
+      <th scope="col">Link</th>
       <th scope="col">Type</th>
-      <th scope="col"></th>
+      <th scope="col">ISBN</th>
+      <th scope="col">Edition</th>
+      <th scope="col">Page Range</th>
+      <th scope="col">Chapter</th>
+      <th scope="col">Website Name</th>
+      <th scope="col">Journal</th>
+      <th scope="col">Volume</th>
+      <th scope="col">Issue</th>
+      <th scope="col">DOI</th>
       <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
-{{#items}}
-<tr>
+{{#item}}
+  <tr>
       <th scope="row">{{id}}</th>
       <td>{{title}}</td>
+      <td><a target="new" href="{{{url}}}">{{url}}</a></td>
       <td>{{type}}</td>      
-      <td><a href="{{{inspecturl}}}" class="btn btn-primary text-white">View Item</a></td>
-      <td><a href="{{{removeurl}}}" class="btn btn-danger text-white">Remove from this list</a></td>
-</tr>
-{{/items}}
+      <td>{{isbn}}</td>
+      <td>{{edition}}</td>
+      <td>{{pagerange}}</td>
+      <td>{{chapter}}</td>
+      <td>{{name}}</td>
+      <td>{{journal}}</td>
+      <td>{{volume}}</td>
+      <td>{{issue}}</td>
+      <td>{{doi}}</td>
+      <td><a href="{{{modifythisurl}}}" class="btn btn-warning text-white">Modify</a></td>
+  </tr>
+{{/item}}
   </tbody>
 </table>
 

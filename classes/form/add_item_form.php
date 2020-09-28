@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->libdir . '/formslib.php');
 
+use MoodleQuickForm;
+
 class add_item_form extends \moodleform
 {
 
@@ -103,7 +105,7 @@ class add_item_form extends \moodleform
 
     function display_book_form($form)
     {
-        $form->addElement('header', 'general', get_string('form_additionalinfo', 'mod_readinglist'));
+        $form->addElement('header', 'additional_info', get_string('form_additionalinfo', 'mod_readinglist'));
         // ISBN
         $form->addElement(
             'text',
@@ -112,6 +114,9 @@ class add_item_form extends \moodleform
             ['size' => '30', 'maxlength' => '255']
         );
         $form->setType('isbn', PARAM_TEXT);
+        // ISBN BUTTON
+        $form->addElement('button', 'isbn_btn', get_string("form_isbnbutton", 'mod_readinglist'));
+        $form->setType('isbn_btn', PARAM_TEXT);
         // Edition
         $form->addElement(
             'text',
@@ -140,7 +145,7 @@ class add_item_form extends \moodleform
 
     function display_article_form($form)
     {
-        $form->addElement('header', 'general', get_string('form_additionalinfo', 'mod_readinglist'));
+        $form->addElement('header', 'additional_info', get_string('form_additionalinfo', 'mod_readinglist'));
         // journal
         $form->addElement(
             'text',
@@ -185,7 +190,7 @@ class add_item_form extends \moodleform
     function display_website_form($form)
     {
 
-        $form->addElement('header', 'general', get_string('form_additionalinfo', 'mod_readinglist'));
+        $form->addElement('header', 'additional_info', get_string('form_additionalinfo', 'mod_readinglist'));
         // name
         $form->addElement(
             'text',
@@ -195,5 +200,7 @@ class add_item_form extends \moodleform
         );
         $form->setType('name', PARAM_TEXT);
         $form->addRule('url', null, 'required', null, 'client');
+        $form->addElement('button', 'url_btn', get_string("form_urlbutton", 'mod_readinglist'));
+        $form->setType('url_btn', PARAM_TEXT);
     }
 }
